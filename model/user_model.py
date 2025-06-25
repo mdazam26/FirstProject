@@ -11,6 +11,7 @@ class User_model():
             return f" db not connect {e}"
     
     def user_signup_logic(self,data):
+        print("user signup logic",data)
         try:
             self.cursor.execute("""
                     CREATE TABLE IF NOT EXISTS users (
@@ -26,6 +27,8 @@ class User_model():
             email = data.get('email')
             name = data.get('name')
             password = data.get('password')
+            if not all([username, email, password]):
+                return "Missing required fields (username, email, or password)"
 
             hashed_password = generate_password_hash(password, method='scrypt')
             
@@ -55,7 +58,7 @@ class User_model():
 
             self.cursor.execute("SELECT password FROM users WHERE username = ? ", (username,))
             result = self.cursor.fetchone()
-
+            print("result",result,username,password)
             if result:
                 stored_hash = result[0]
                 if check_password_hash(stored_hash, password):
@@ -69,15 +72,24 @@ class User_model():
              
 
 
-    def user_getall_logic(self):
+    def user_getall_logic(self,data):
         try:
-            self.cursor.execute("SELECT * FROM users")
-            rows = self.cursor.fetchall()
-            self.conn.close()
-            return rows
+            username = data.get('username')
+            # password = data.get('password')
+            self.cursor.execute("SELECT * FROM users WHERE username = ? ", (username,))
+            row = self.cursor.fetchone()
+            print("row",row,username)
+            if row:
+                user_data = {
+                    "id": row[0],
+                    "username": row[1],
+                    "email": row[2],
+                    "name": row[3],
+                    "password": row[4]
+                }
+            return user_data
         except Exception as e:
             return f"get_users() failed: {e}"
-        
     def user_update_logic(self,data):
         try:
             
