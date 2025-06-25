@@ -19,3 +19,21 @@ class Fetch():
             return rows
         except Exception as e:
             return f"get_users() failed: {e}"
+
+    
+    def add_user(self,data):
+        return f"add user logic{data}"
+
+    # def update_user(self,id,data):
+    #     try:
+    #         username = data.get('username')
+    #         email = data.get('email')
+    #         self.cursor.execute(f"UPDATE users SET username={username}, email={email} WHERE id={data['id']}")
+    
+    #         if self.cursor.rowcount > 0:
+    #             return "user updated successfully"
+    #         else :
+    #             return "Nothing to update"
+        
+    #     except Exception as e:
+    #         return f"updating fails {e}"
