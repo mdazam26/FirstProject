@@ -7,7 +7,9 @@ class Fetch():
 
             self.conn=sqlite3.connect('demo.db')
             self.cursor=self.conn.cursor()
+            print("db connected")
         except Exception as e:
+           print("db not connect", e)
            return f" db not connect {e}"
         
 
@@ -16,6 +18,9 @@ class Fetch():
             self.cursor.execute("SELECT * FROM users")
             rows = self.cursor.fetchall()
             self.conn.close()
+            if not rows:
+                return "No users found"
+            print(rows,"rows are here")
             return rows
         except Exception as e:
             return f"get_users() failed: {e}"

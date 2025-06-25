@@ -1,7 +1,10 @@
 from flask import Flask , request
 from login_user import Fetch
-
+from user_login import user_login
+from flask_cors import CORS 
+from create_user import create_user
 app = Flask(__name__)
+CORS(app) 
 
 
 
