@@ -1,17 +1,18 @@
-from flask import Flask , request
-from flask_cors import CORS 
+from flask import Flask, request
+from flask_cors import CORS
+
 app = Flask(__name__)
-# CORS(app) 
+CORS(app)
 
-CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/')
+# first route
+@app.route("/")
 def welcome():
+    return "hello world"
 
-    return 'hello world'
 
-
+# add user_controller file to app.py
 from controller import user_controller
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
