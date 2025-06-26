@@ -37,6 +37,6 @@ def user_update():
 
 @app.route("/user/delete/<int:id>", methods=['DELETE'])
 def user_delete(id):
-    data = request.get_json()
+    # data = request.get_json()
     model_obj = User_model()
     return model_obj.user_delete_logic(id)
