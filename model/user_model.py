@@ -50,23 +50,29 @@ class User_model():
         except Exception as e:
             return f"signup error {e}"
 
-
+    # login logic and funtion data except data as arguments 
     def user_login_logic(self,data):
         try:
+            # get the username and password from the data and store in variables
             username = data.get('username')
             password = data.get('password')
 
+            # execute the query to select the password for the given username
             self.cursor.execute("SELECT password FROM users WHERE username = ? ", (username,))
+            # store query result in result variable
             result = self.cursor.fetchone()
             print("result",result,username,password)
+            # if result is not empty then check the password with the stored password else return user not found
             if result:
                 stored_hash = result[0]
+                # check the password with the stored hash though check_password_hash method
                 if check_password_hash(stored_hash, password):
                     return f"Login successful for {username}"
                 else:
                     return "Invalid password"
             else:
                 return "User not found"
+        # if any exception occurs then return the error message
         except Exception as e:
             return f"login user error {e}"
              
