@@ -129,6 +129,7 @@ class User_model():
             return "user update error"
     
     def user_delete_logic(self,id):
+        print("user delete logic",id)
         try:
             self.cursor.execute(f"DELETE from users WHERE id = ?",(id,))
 

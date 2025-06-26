@@ -32,7 +32,7 @@ function UserView() {
 
                 const data = await response.json(); 
                 // setUserData(data); 
-                console.log("Response Data:", data.email,'----',response);
+                // console.log("Response Data:", data.email,'----',response);
                 setEmail(data.email);
                 setUsername(data.username);
                 setPassword(data.password);
@@ -56,7 +56,8 @@ function UserView() {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ id: id })
         })
         console.log("Delete Response:", response);
         navigate('/register');``
@@ -84,13 +85,15 @@ function UserView() {
     return (
     <div className="login-page">
         <div className='login-container'>
-            <div className='logout-icon' onClick={()=>navigate("/login")}> <FiLogOut /> Logout</div>
+            <div className='logout-icon' onClick={()=>{if(username)navigate("/login")
+                else navigate("/register")
+            }}> <FiLogOut /> {username?"Logout":"Register"}</div>
             <h1 className='login-title'>Page View </h1>
-            <span>{username}</span>
+            <span>{username?username:"User not found please register"}</span>
             {/* <span>{email}</span>
             <span>{password}</span> */}
-            <div className='delete-icon'> <MdEdit color="blue" onClick={()=>setEdit(true)}/> <MdDelete color='red'  onClick={() => handleDelete(id)}/></div>
-            <form className='login-form' >
+{  username?          <div className='delete-icon'> <MdEdit color="blue" onClick={()=>setEdit(true)}/> <MdDelete color='red'  onClick={() => handleDelete(id)}/></div>
+:""}           {username? <form className='login-form' >
                 <div className='login-info'>
                     <span>Name:</span>
                     {edit?<input
@@ -136,7 +139,7 @@ function UserView() {
                     />:"*******"}
                 </div>
                { edit ?<button type="submit" className='login-button' onClick={()=>handleEditButton()}>Save</button>:""}
-            </form>
+            </form>:""}
 
         </div>
     </div>
