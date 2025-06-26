@@ -17,25 +17,29 @@ class User_model:
     def user_signup_logic(self, data):
         print("user signup logic", data)
         try:
+            # Create 'users' table if it doesn't exist
             self.cursor.execute(
                 """
                     CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         username TEXT NOT NULL,
                         email TEXT UNIQUE NOT NULL,
-                        name TEXT
+                        name TEXT ,
                         password TEXT
                     )
                 """
             )
-
+            # Extract individual fields from incoming data dictionary
             username = data.get("username")
             email = data.get("email")
             name = data.get("name")
             password = data.get("password")
+
+            # Check for required fields
             if not all([username, email, password]):
                 return "Missing required fields (username, email, or password)"
-
+            
+            # Hash the password using a secure method before storing
             hashed_password = generate_password_hash(password, method="scrypt")
 
             self.cursor.execute(
@@ -46,19 +50,22 @@ class User_model:
                 (username, email, name, hashed_password),
             )
 
-            self.conn.commit()
+            self.conn.commit() # Commit  to save changes
             self.conn.close()
 
-            return (
+            return (   # Return a success message
                 f"signup successfully of username is {username} and email is {email} "
             )
 
         except sqlite3.IntegrityError as e:
+            # Handle case where email already exists (due to UNIQUE constraint)
             return f"user already exists {e}"
 
         except Exception as e:
+            # Catch all other exceptions
             return f"signup error {e}"
         finally:
+            # Close the DB connection whether or not an error occurred
             self.conn.close()
 
     # login logic and funtion data except data as arguments
@@ -102,25 +109,29 @@ class User_model:
         finally:
             self.conn.close()
 
+    # Start of the method to fetch a user by username from the database
+
     def user_getall_logic(self, data):
         try:
-            username = data.get("username")
+            username = data.get("username") #Extract 'username' from the input dictionary
 
             # password = data.get('password')
-
+            # Execute an SQL query to select all columns from 'users' where the username matches
             self.cursor.execute("SELECT * FROM users WHERE username = ? ", (username,))
-            row = self.cursor.fetchone()
+            row = self.cursor.fetchone()   # Fetch one row from the result set
             print("row", row, username)
-            if row:
+            if row:                       # If a row is found, construct a dictionary with user details
                 user_data = {
                     "id": row[0],
                     "username": row[1],
                     "email": row[2],
                     "name": row[3],
                     "password": row[4],
-                }
-            return user_data
+                } 
+                # Return the user data dictionary (Only safe if `row` is found)
+            return user_data  
         except Exception as e:
+            # If an exception occurs, return a string with the error message
             return f"get_users() failed: {e}"
         finally:
             self.conn.close()
