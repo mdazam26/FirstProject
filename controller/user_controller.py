@@ -14,10 +14,15 @@ def user_signup():
     return model_obj.user_signup_logic(data)
 
 
+# login routes where we get the post request from the server
 @app.route("/user/login", methods=["POST"])
+# funtion for login data
 def user_login():
+    # the that we get from the request will store in data variable
     data = request.get_json()
+    # create an instance(object) of User_model
     model_obj = User_model()
+    # call the user_login_logic method from User_model and pass the data and return the result
     return model_obj.user_login_logic(data)
 
 
@@ -29,8 +34,6 @@ def user_getall():
 
 
 # update route, from here data is passed to user_delete_logic to udpdate
-
-
 @app.route("/user/update", methods=["PUT"])
 def user_update():
     data = request.get_json()
@@ -39,10 +42,15 @@ def user_update():
 
 
 # delete route, from here data is passed to user_delete_logic for logic
-
-
 @app.route("/user/delete/<int:id>", methods=["DELETE"])
 def user_delete(id):
-    data = request.get_json()
+    # data = request.get_json()
     model_obj = User_model()
     return model_obj.user_delete_logic(id)
+
+
+# fetchall route, to fetchall user in postman
+@app.route("/user/fetchall")
+def fetchall():
+    model_obj = User_model()
+    return model_obj.fetch_all()

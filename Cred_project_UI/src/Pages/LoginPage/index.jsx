@@ -23,14 +23,14 @@ function LoginUser() {
 
             })
             // const res=response.text();
-            // console.log(response,response.ok ,response.status ,"response of login");
+            // console.log(response,response.ok ,response.status ,"response of login",response.data);
             if(response.ok || response.status === 200){ 
                 // alert("Login Successful");
                 navigate('/user-profile')
             }
         }
         catch(e){
-            alert("Error occurred, Try again")
+            alert("User not found, Please register first");
         }
     }
     useEffect(() => {
@@ -44,7 +44,7 @@ function LoginUser() {
             <h1 className='login-title'>Login</h1>
             <form className='login-form' onSubmit={handleSubmit}>
                 <div className='login-info'>
-                    <span>Enter User Email:</span> 
+                    <span>Enter User Name:</span> 
                     <input
                         className='login-input'
                         type="text"
